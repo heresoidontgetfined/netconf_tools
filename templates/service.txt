@@ -1,0 +1,13 @@
+{# templates/service.txt #}
+
+classifiers classifier 'CLASSIFIER_{{ vlan }}' filter-entry 'classifier:vtag-stack' vtags '1' vlan-id {{ vlan }}
+
+fds fd '{{ fd_name }}' description "{{ fd_desc }}" mode vpws
+
+fps fp '{{ fp_name_east }}' fd-name "{{ fd_name }}" logical-port "{{ log_port_east }}" classifier-list-precedence 100 stats-collection on classifier-list "CLASSIFIER_{{ vlan }}"
+fps fp '{{ fp_name_east }}' ingress-l2-transform 'ingressTransform' vlan-stack '1' pop-type
+fps fp '{{ fp_name_east }}' egress-l2-transform 'egressTransform' vlan-stack '1' push-pcp map push-vid {{ vlan }}
+
+fps fp '{{ fp_name_west }}' fd-name "{{ fd_name }}" logical-port "{{ log_port_west }}" classifier-list-precedence 100 stats-collection on classifier-list "CLASSIFIER_{{ vlan }}"
+fps fp '{{ fp_name_west }}' ingress-l2-transform 'ingressTransform' vlan-stack '1' pop-type
+fps fp '{{ fp_name_west }}' egress-l2-transform 'egressTransform' vlan-stack '1' push-pcp map push-vid {{ vlan }}
